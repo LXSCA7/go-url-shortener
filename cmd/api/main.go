@@ -19,17 +19,7 @@ func main() {
 	repo := repository.NewMemoryRepository()
 	svc := services.NewShortenerService(node, repo)
 	handler := handlers.NewHTTPHandler(svc)
-
-	mux := http.NewServeMux()
-
-	mux.HandleFunc("GET /ping", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "text/plain")
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("pong\n"))
-	})
-
-	mux.HandleFunc("GET /{code}", handler.Get)
-	mux.HandleFunc("POST /api", handler.Create)
+	mux := handlers.NewRouter(handler)
 
 	port := ":8080"
 	fmt.Printf("🚀 api running at %s\n\n", port)
