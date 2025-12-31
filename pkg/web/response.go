@@ -22,6 +22,14 @@ func EncodeJSON(w http.ResponseWriter, status int, data any) error {
 	return nil
 }
 
+func Redirect(w http.ResponseWriter, r *http.Request, originalURL string) {
+	w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+	w.Header().Set("Pragma", "no-cache")
+	w.Header().Set("Expires", "0")
+
+	http.Redirect(w, r, originalURL, http.StatusTemporaryRedirect)
+}
+
 type ErrorPayload struct {
 	Error string `json:"error"`
 }
