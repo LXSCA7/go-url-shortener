@@ -28,6 +28,7 @@ func main() {
 		w.Write([]byte("pong\n"))
 	})
 
+	mux.HandleFunc("GET /{code}", handler.Get)
 	mux.HandleFunc("POST /api", handler.Create)
 
 	port := ":8080"

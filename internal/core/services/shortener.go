@@ -46,5 +46,10 @@ func (s *ShortenerService) Shorten(ctx context.Context, originalURL string, alia
 }
 
 func (s *ShortenerService) GetOriginalURL(ctx context.Context, code string) (string, error) {
-	panic("unimplemented")
+	l, err := s.repo.GetByCode(ctx, code)
+	if err != nil {
+		return "", err
+	}
+
+	return l.OriginalURL, nil
 }

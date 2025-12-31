@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/LXSCA7/go-url-shortener/internal/core/ports"
 	"github.com/LXSCA7/go-url-shortener/pkg/web"
@@ -36,4 +37,15 @@ func (h *HTTPHandler) Create(w http.ResponseWriter, r *http.Request) {
 	}
 
 	web.EncodeJSON(w, http.StatusCreated, link)
+}
+
+func (h *HTTPHandler) Get(w http.ResponseWriter, r *http.Request) {
+	code := strings.TrimSpace(r.PathValue("code"))
+	originalURL, err := h.svc.GetOriginalURL(r.Context(), code)
+	if err != nil {
+		web.EncodeError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	web.Redirect(w, r, originalURL)
 }
