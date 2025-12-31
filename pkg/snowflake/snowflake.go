@@ -20,7 +20,7 @@ const (
 	stepMax   = -1 ^ (-1 << stepBits)
 	timeShift = nodeBits + stepBits
 	nodeShift = stepBits
-	epoque    = 1735689600000 // 01.01.2025
+	epoch     = 1735689600000 // 01.01.2025
 )
 
 func NewNode(nodeID int64) (*Node, error) {
@@ -54,5 +54,5 @@ func (n *Node) Generate() int64 {
 
 	n.timestamp = now
 
-	return ((now - epoque) << timeShift) | (n.nodeID << nodeShift) | n.step
+	return ((now - epoch) << timeShift) | (n.nodeID << nodeShift) | n.step
 }
