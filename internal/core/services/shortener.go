@@ -38,8 +38,10 @@ func (s *ShortenerService) Shorten(ctx context.Context, originalURL string, alia
 		Visits:      0,
 	}
 
-	_ = l // so pra compilar
-	// if err := repo.Save(l); err != nil { } // quando tivermos o repo
+	if err := s.repo.Save(ctx, l); err != nil {
+		return domain.Link{}, err
+	}
+
 	return l, nil
 }
 
