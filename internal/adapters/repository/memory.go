@@ -27,7 +27,7 @@ func (m *MemoryRepository) GetByCode(ctx context.Context, code string) (domain.L
 	defer m.mu.Unlock()
 	link, exists := m.links[code]
 	if !exists {
-		return domain.Link{}, errors.New("Not found")
+		return domain.Link{}, errors.New("not found")
 	}
 
 	return link, nil
