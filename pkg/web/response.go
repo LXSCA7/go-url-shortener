@@ -5,6 +5,12 @@ import (
 	"net/http"
 )
 
+// object needs to be a pointer
+func DecodeJSON(object any, r *http.Request) error {
+	defer r.Body.Close()
+	return json.NewDecoder(r.Body).Decode(object)
+}
+
 func EncodeJSON(w http.ResponseWriter, status int, data any) error {
 	w.Header().Set("Content-type", "application/json")
 	w.WriteHeader(status)
