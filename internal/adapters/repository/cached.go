@@ -13,6 +13,10 @@ type CachedLinkRepository struct {
 	cacheRepo ports.CacheRepository
 }
 
+func NewCachedLinkRepository(dbRepo ports.LinkRepository, cacheRepo ports.CacheRepository) *CachedLinkRepository {
+	return &CachedLinkRepository{dbRepo: dbRepo, cacheRepo: cacheRepo}
+}
+
 var _ ports.LinkRepository = (*CachedLinkRepository)(nil)
 
 func (c *CachedLinkRepository) GetByCode(ctx context.Context, code string) (domain.Link, error) {

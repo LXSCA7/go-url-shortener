@@ -13,6 +13,7 @@ import (
 	"github.com/LXSCA7/go-url-shortener/internal/config"
 	"github.com/LXSCA7/go-url-shortener/internal/core/services"
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/redis/go-redis/v9"
 )
 
 func main() {
@@ -37,7 +38,20 @@ func main() {
 		log.Fatalf("banco de dados não está respondendo: %v", err)
 	}
 
-	repo := repository.NewPostgresRepository(pool)
+	redisOpt, err := redis.ParseURL(cfg.CacheURL)
+	if err != nil {
+		log.Fatalf("redis nao respondendo: %v", err)
+	}
+
+	redisOpt.PoolSize = 100
+	redisOpt.MinIdleConns = 10
+
+	redisClient := redis.NewClient(redisOpt)
+
+	pgRepo := repository.NewPostgresRepository(pool)
+	redisRepo := repository.NewRedisRepository(redisClient)
+
+	repo := repository.NewCachedLinkRepository(pgRepo, redisRepo)
 	svc := services.NewShortenerService(node, repo)
 	handler := handlers.NewHTTPHandler(svc)
 	mux := handlers.NewRouter(handler)
