@@ -3,7 +3,7 @@ package domain
 import "time"
 
 type Link struct {
-	Id          int64     `json"id,string"`
+	Id          int64     `json:"id,string"`
 	OriginalURL string    `json:"original_url"`
 	ShortCode   string    `json:"short_code"`
 	CreatedAt   time.Time `json:"created_at"`
